@@ -1,0 +1,81 @@
+#!/usr/bin/python3
+import sys
+import math
+from math import *
+from decimal import Decimal
+
+
+def tir_h():
+    if (sys.argv[1] == '-h'):
+        print("USAGE\n\t./105torus opt a0 a1 a2 a3 a4 n\n")
+        print("DESCRIPTION\n\topt       method option:\n\t\t      1 for a the bisection method\n\t\t      2 for Newton's method\n\t\t      3 for the secant method")
+        print("\ta[0-4]    coefficients pf the equation")
+        print("\tn         precision (the application of the polynomial to the solution should be smaller than 10^-n)")
+        exit (0)
+
+
+def bisection_method(a0, a1, a2, a3, a4, n):
+    a = int(0)
+    b = int(1)
+    while ((b - a) > pow(10, -n)):
+        x = (a + b) / 2
+        if ((a4 * pow(a, 4) + a3 * pow(a, 3) + a2 * pow(a, 2) + a1 * a + a0) * (a4 * pow(x, 4) + a3 * pow(x, 3) + a2 * pow(x, 2) + a1 * x + a0) <= 0):
+            b = x
+        else:
+            a = x
+        if (len(str(x)) > 7):
+            print(f"x = {format(x, '.6f')}")
+        else:
+            print(f"x = {x}")
+
+
+def Newton_method(a0, a1, a2, a3, a4, n):
+    x = 0.5
+    couscous = (a4 * pow(x, 4)) + (a3 * pow(x, 3)) + (a2 * pow(x ,2)) + (a1 * x) + a0
+    locat = (4 * a4 * pow(x, 3)) + (3 * a3 * pow(x, 2)) + (2 * a2 * x) + (a1 * x)
+    if locat == 0:
+        exit (84)
+    tmp = x - (couscous / locat)
+    solu = (a4 * pow(tmp, 4)) + (a3 * pow(tmp, 3)) + (a2 * pow(tmp, 2)) + (a1 * tmp) + a0
+
+    while math.fabs(solu) > pow(10, -n):
+        couscous = (a4 * pow(x, 4)) + (a3 * pow(x, 3)) + (a2 * pow(x, 2)) + (a1 * x) + a0
+        locat = (4 * a4 * pow(x, 3)) + (3 * a3 * pow(x, 2)) + (2 * a2 * x) + (a1 * x)
+        solu = (a4 * pow(tmp, 4)) + (a3 * pow(tmp, 3)) + (a2 * pow(tmp, 2)) + (a1 * tmp) + a0
+        if (locat == 0):
+	        exit (84)
+        if (len(str(x)) > 14):
+            print(f"x = {format(x, '.12f')}")
+        else:
+            print(f"x = {x}")
+        x = tmp = x - (couscous / locat)
+
+
+def secant_method(a0, a1, a2, a3, a4, n):
+    print(f"Hello")
+
+
+if __name__ == "__main__":
+    if (len(sys.argv) < 2):
+        exit (84)
+    if (len(sys.argv[7]) <= 0):
+        exit (84)
+    tir_h()
+    if (len(sys.argv) < 8 or len(sys.argv) > 8):
+        exit (84)
+    opt = sys.argv[1]
+    a0 = float(sys.argv[2])
+    a1 = float(sys.argv[3])
+    a2 = float(sys.argv[4])
+    a3 = float(sys.argv[5])
+    a4 = float(sys.argv[6])
+    n = float(sys.argv[7])
+    if opt == '1':
+        bisection_method(a0, a1, a2, a3, a4, n)
+    elif opt == '2':
+        Newton_method(a0, a1, a2, a3, a4, n)
+    elif opt == '3':
+        secant_method(a0, a1, a2, a3, a4, n)
+    else:
+        exit(84)
+    exit(0)

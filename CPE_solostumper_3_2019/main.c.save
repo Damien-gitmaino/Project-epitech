@@ -1,0 +1,13 @@
+/*
+** EPITECH PROJECT, 2020
+** fozzbazz
+** File description:
+** the number is a multiple
+*/
+
+#include <stdio.h>
+
+int main(int ac, char **av)
+{
+	if (ac > 2 && ac >
+}

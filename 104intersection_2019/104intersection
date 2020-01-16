@@ -1,0 +1,99 @@
+#!/usr/bin/python3
+import sys
+from math import *
+from decimal import Decimal
+
+
+def printf_line_passing(xp, yp, zp, xv, yv, zv):
+    print(f"Line passing through the point ({int(xp)}, {int(yp)}, {int(zp)}) and parallel to the vector ({int(xv)}, {int(yv)}, {int(zv)})")
+
+
+def print_res(xp, yp, zp, xv, yv, zv, a, b, c):
+    delta = b * b - 4 * a * c
+    if delta < 0:
+        print("No intersection point.")
+        exit (0)
+    elif delta == 0:
+        print("1 intersection point:")
+        if (2 * a) == 0:
+            print("There is an infinite number of intersection points.")
+            exit (0)
+        x1 = -b / (2 * a)
+        print(f"({format(xp + x1 * xv, '.3f')}, {format(yp + x1 * yv, '.3f')}, {format(zp + x1 * zv, '.3f')})")
+        exit (0)
+    elif delta > 0:
+        print("2 intersection point:")
+        if (2 * a) == 0:
+            print("There is an infinite number of intersection points.")
+            exit (0)
+        x1 = (-b + sqrt(delta)) / (2 * a)
+        x2 = (-b - sqrt(delta)) / (2 * a)
+        print(f"({format(xp + x1 * xv, '.3f')}, {format(yp + x1 * yv, '.3f')}, {format(zp + x1 * zv, '.3f')})")
+        print(f"({format(xp + x2 * xv, '.3f')}, {format(yp + x2 * yv, '.3f')}, {format(zp + x2 * zv, '.3f')})")
+
+
+def sphere(xp, yp, zp, xv, yv, zv):
+    radius = int(sys.argv[8])
+    print(f"Sphere of radius {radius}")
+    printf_line_passing(xp, yp, zp, xv, yv, zv)
+    a = pow(xv, 2) + pow(yv, 2) + pow(zv, 2)
+    b = (2 * xp * xv) + (2 * yp * yv) + (2 * zp * zv)
+    c = (pow(xp, 2) + pow(yp, 2) + pow(zp, 2)) - pow(float(sys.argv[8]), 2)
+    print_res(xp, yp, zp, xv, yv, zv, a, b, c)
+
+
+def cylinder(xp, yp, zp, xv, yv, zv):
+    radius = int(sys.argv[8])
+    print(f"Cylinder of radius {radius}")
+    printf_line_passing(xp, yp, zp, xv, yv, zv)
+    a = pow(xv, 2) + pow(yv, 2)
+    b = (2 * xp * xv) + (2 * yp * yv)
+    c = (pow(xp, 2) + pow(yp, 2)) - pow(radius, 2)
+    print_res(xp, yp, zp, xv, yv, zv, a, b, c)
+
+
+def cone(xp, yp, zp, xv, yv, zv):
+    deg = int(sys.argv[8])
+    angle = (float(sys.argv[8]) * pi) / 180.0
+    print(f"Cone with a {deg} degree angle")
+    printf_line_passing(xp, yp, zp, xv, yv, zv)
+    a = pow(xv, 2) + pow(yv, 2) - pow(zv, 2) * pow(tan(angle), 2)
+    b = ((xp * xv) * 2) + (2 * (yp * yv)) - (2 * (zp * zv)) * pow(tan(angle), 2)
+    c = pow(xp, 2) + pow(yp, 2) - (pow(zp, 2) * pow(tan(angle), 2))
+    print_res(xp, yp, zp, xv, yv, zv, a, b, c)
+
+
+def tir_h():
+    if (sys.argv[1] == '-h'):
+        print("USAGE\n\t./104intersection opt xp yp zp xv yv zv p\n")
+        print("DESCRIPTION\n\topt             surface option: 1 for a sphere, 2 for a cylinder, 3 for a cone")
+        print("\t(xp, yp, zp)    coordinates of a point by which the light ray passes through")
+        print("\t(xv, yv, zv)    coordinates of a vector parallel to the light ray")
+        print("\tp               parameter: radius of the sphere, radius of the cylinder, or")
+        print("\t                angle formed by the cone and the Z-axis")
+        exit (0)
+
+
+if __name__ == "__main__":
+    if (len(sys.argv) < 2):
+        exit(84)
+    tir_h()
+    if (len(sys.argv) < 9 or len(sys.argv) > 9):
+        exit(84)
+    opt = sys.argv[1]
+    xp = float(sys.argv[2])
+    yp = float(sys.argv[3])
+    zp = float(sys.argv[4])
+    xv = float(sys.argv[5])
+    yv = float(sys.argv[6])
+    zv = float(sys.argv[7])
+    if opt == '1':
+        sphere(xp, yp, zp, xv, yv, zv)
+    elif opt == '2':
+        cylinder(xp, yp, zp, xv, yv, zv)
+    elif opt == '3':
+        cone(xp, yp, zp, xv, yv, zv)
+    else:
+        exit(84)
+    exit(0)
+

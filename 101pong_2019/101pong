@@ -1,0 +1,111 @@
+#!/usr/bin/python3
+import sys
+import math
+from math import *
+from decimal import Decimal
+
+def super_error():
+    x0 = float(sys.argv[1])
+    y0 = float(sys.argv[2])
+    z0 = float(sys.argv[3])
+    x1 = float(sys.argv[4])
+    y1 = float(sys.argv[5])
+    z1 = float(sys.argv[6])
+    x = format(x1 - x0, '.2f')
+    y = format(y1 - y0, '.2f')
+    z = format(z1 - z0, '.2f')
+    if (x == 0 and y == 0 and z == 0):
+        return 84
+
+
+def error():
+    if len(sys.argv) == 8:
+        return 0
+    if len(sys.argv) < 8:
+        return 84
+    if len(sys.argv) > 8:
+        return 84
+
+
+def calc_op_angle():
+    x0 = float(sys.argv[1])
+    y0 = float(sys.argv[2])
+    z0 = float(sys.argv[3])
+    x1 = float(sys.argv[4])
+    y1 = float(sys.argv[5])
+    z1 = float(sys.argv[6])
+    t = float(sys.argv[7])
+    if sqrt(pow(x1-x0, 2)+pow(y1-y0, 2)+pow(z1-z0, 2)) == 0:
+        exit(84)
+    new_x = format(((x1 - x0) * t) + (x1 - x0) + x0, '.2f')
+    incidence = format(90-(acos(abs(z1-z0)/sqrt(pow(x1-x0, 2)+pow(y1-y0, 2)+pow(z1-z0, 2))))*180/math.pi, '.2f')
+    if (Decimal(incidence) < 0):
+        incidence = incidence * -1
+    if Decimal(new_x) < 0:
+        print("The incidence angle is:")
+        print(incidence, end = '')
+        print(" degrees")
+    else:
+        print("The ball won’t reach the paddle.")
+
+
+def calc_cood_t():
+    x0 = float(sys.argv[1])
+    y0 = float(sys.argv[2])
+    z0 = float(sys.argv[3]) 
+    x1 = float(sys.argv[4])
+    y1 = float(sys.argv[5])
+    z1 = float(sys.argv[6])
+    t = float(sys.argv[7])
+    new_x = format(((x1 - x0) * t) + (x1 - x0) + x0, '.2f') 
+    new_y = format(((y1 - y0) * t) + (y1 - y0) + y0, '.2f')
+    new_z = format(((z1 - z0) * t) + (z1 - z0) + z0, '.2f')
+    print('(', end = '')
+    print(new_x, end = '')
+    print(', ', end = '')
+    print(new_y, end = '')
+    print(', ', end = '')
+    print(new_z, end = '')
+    print(')')
+
+
+def volicity_calc():
+    x0 = float(sys.argv[1])
+    y0 = float(sys.argv[2])
+    z0 = float(sys.argv[3])
+    x1 = float(sys.argv[4])
+    y1 = float(sys.argv[5])
+    z1 = float(sys.argv[6])
+    vec_x = format(x1 - x0, '.2f')
+    vec_y = format(y1 - y0, '.2f')
+    vec_z = format(z1 - z0, '.2f')
+    print('(', end = '')
+    print(vec_x, end = '')
+    print(', ', end = '')
+    print(vec_y, end = '')
+    print(', ', end = '')
+    print(vec_z, end = '')
+    print(')')
+
+
+if __name__ == '__main__':
+    if error() == 84:
+        exit(84)
+    i = 0
+    while i <= 7:
+        if ((sys.argv[i]) >= 'a'):
+            if ((sys.argv[i]) <= 'z'):
+                exit(84)
+        i = i + 1
+    t = float(sys.argv[7])
+    if t < 0:
+        exit(84)
+    if Decimal(t) % 1 != 0:
+        exit(84)
+    print("The velocity vector of the ball is:")
+    volicity_calc()
+    print("At time t + ", end = '')
+    print(format(t, '.0f'), end = '')
+    print(", ball coordinates will be:")
+    calc_cood_t()
+    calc_op_angle()

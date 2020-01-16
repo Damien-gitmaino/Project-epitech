@@ -1,0 +1,113 @@
+#!/usr/bin/python3
+import sys
+import math
+from math import *
+from decimal import Decimal
+
+def spe_t(x ,y, i):
+    if len(sys.argv) < 6:
+        exit (84)
+    x1 = int(sys.argv[i + 1])
+    x2 = int(sys.argv[i + 2])
+    print(f"Translation along vector ({x1}, {x2})")
+
+
+def spe_z(x ,y ,i):
+    nb1 = int(sys.argv[i + 1])
+    nb2 = int(sys.argv[i + 2])
+    print(f"Scaling by factors {nb1} and {nb2}")
+
+
+def spe_r(x, y, i):
+    jo1 = int(sys.argv[i + 1])
+    print(f"Rotation by a {jo1} degree angle")
+
+
+def spe_s(x, y, i):
+    po1 = int(sys.argv[i + 1])
+    print(f"Reflection over an axis with an inclination angle of {po1} degrees")
+
+def error():
+    if len(sys.argv) == 1:
+        return 84
+    if len(sys.argv) < 5:
+        return 84
+    if len(sys.argv) > 13:
+        return 84
+
+def print_matrix(matrix):
+    op = format(float(matrix[0]), '.2f')
+    op1 = format(float(matrix[1]), '.2f')
+    op2 = format(float(matrix[2]), '.2f')
+    op3 = format(float(matrix[3]), '.2f')
+    op4 = format(float(matrix[4]), '.2f')
+    op5 = format(float(matrix[5]), '.2f')
+    print(f"{op}\t{op1}\t{op2}")
+    print(f"{op3}\t{op4}\t{op5}")
+    print("0.00\t0.00\t1.00") 
+
+
+def calc_matrix_t(matrix):
+    matrix[2] = format(float(sys.argv[i + 1]) + matrix[2], '.2f')
+    matrix[5] = format(float(sys.argv[i + 2]) + matrix[5], '.2f')
+    return (matrix)
+
+
+def calc_matrix_z(matrix):
+    matrix[0] = format(float(sys.argv[i + 1]) * matrix[0], '.2f')
+    matrix[4] = format(float(sys.argv[i + 2]) * matrix[4], '.2f')
+    return (matrix)
+
+
+def calc_matrix_r(matrix):
+    matrix[0] = format(math.cos(float(sys.argv[i + 1]) / 180 * math.pi), '.2f')
+    matrix[1] = format(-math.sin(float(sys.argv[i + 1]) / 180 * math.pi), '.2f')
+    matrix[3] = format(math.sin(float(sys.argv[i + 1]) / 180 * math.pi), '.2f')
+    matrix[4] = format(float(matrix[0]), '.2f')
+    return (matrix)
+
+
+def calc_matrix_s(matrix):
+    matrix[0] = format(math.cos(2 * float(sys.argv[i + 1]) / 180 * math.pi), '.2f')
+    matrix[1] = format(math.sin(2 * float(sys.argv[i + 1]) / 180 * math.pi), '.2f')
+    matrix[3] = format(math.sin(2 * float(sys.argv[i + 1]) / 180 * math.pi), '.2f')
+    matrix[4] = format(-float(matrix[0]), '.2f')
+    return (matrix)
+
+if __name__ == "__main__":
+    if error() == 84:
+        exit(84)
+    x = format(float(sys.argv[1]), '.2f')
+    y = format(float(sys.argv[2]), '.2f')
+    tmp1 = float(sys.argv[1])
+    tmp2 = float(sys.argv[2])
+    i = 0
+    o = 0
+    matrix = [1.00, 0.00, 0.00, 0.00, 1.00, 0.00]
+    while i < len(sys.argv):
+        if (sys.argv[i][0] == '-' and sys.argv[i][1] == 't'):
+            if (((sys.argv[i + 1]) >= 'a' and (sys.argv[i + 1]) <= 'z') or ((sys.argv[i + 2]) >= 'a' and (sys.argv[i + 2]) <= 'z')):
+                exit(84)
+            spe_t(x, y, i)
+            matrix = calc_matrix_t(matrix)
+        if (sys.argv[i][0] == '-' and sys.argv[i][1] == 'z'):
+            if (((sys.argv[i + 1]) >= 'a' and (sys.argv[i + 1]) <= 'z') or ((sys.argv[i + 2]) >= 'a' and (sys.argv[i + 2]) <= 'z')):
+                exit(84)
+            spe_z(x, y, i)
+            matrix = calc_matrix_z(matrix)        
+        if (sys.argv[i][0] == '-' and sys.argv[i][1] == 'r'):
+            if ((sys.argv[i + 1]) >= 'a' and (sys.argv[i + 1]) <= 'z'):
+                exit(84)
+            spe_r(x, y, i)
+            matrix = calc_matrix_r(matrix)
+        if (sys.argv[i][0] == '-' and sys.argv[i][1] == 's'):
+            if ((sys.argv[i + 1]) >= 'a' and (sys.argv[i + 1]) <= 'z'):
+                    exit(84)
+            spe_s(x, y, i)
+            matrix = calc_matrix_s(matrix)        
+        i = i + 1
+    print_matrix(matrix)
+    coordx = format(float(matrix[0]) * tmp1 + float(matrix[1]) * tmp2 + float(matrix[2]), '.2f')
+    coordy = format(float(matrix[3]) * tmp1 + float(matrix[4]) * tmp2 + float(matrix[5]), '.2f')
+    print(f"({x}, {y}) => ({coordx}, {coordy})")
+    exit (0)
